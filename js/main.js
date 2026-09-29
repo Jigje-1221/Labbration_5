@@ -38,6 +38,20 @@ function validateForm() {
     // Visa eventuella felmeddelanden
 
     // Returnera resultatet (true eller false) av valideringen
+
+    errors = [];
+
+    if(fullnameInput.value === ""){
+        errors.push("Du måste ange ditt fullstända namn")
+    };
+    if(emailInput.value === ""){
+        errors.push("Du måste ange din e-postadress")
+    };
+    if(phoneInput.value === ""){
+        errors.push("Du måste ange ditt telefonnummer")
+    };
+    if(errors.length === 0){return true;}
+    else{return false;};
 }
 
 
@@ -48,6 +62,17 @@ function displayErrors() {
     // Rensa tidigare felmeddelanden
 
     // Skriv ut aktuella felmeddelanden till DOM
+
+    errorList.innerHTML = "";
+
+    for(let i = 0; i < errors.length; i++){
+        let newErrorEl = document.createElement("li");
+        let newErrorText = document.createTextNode(errors[i]);
+
+        newErrorEl.appendChild(newErrorText);
+
+        errorList.appendChild(newErrorEl);
+    }
 }
 
 
@@ -128,3 +153,22 @@ function deleteHistory() {
 
 // När sidan laddas:
 // - läs in och visa eventuell tidigare historik
+
+
+
+form.addEventListener("submit", function(event){
+    event.preventDefault();
+
+    const nameValue = fullnameInput.value;
+    const emailValue = emailInput.value;
+    const phoneValue = phoneInput.value;
+    const fontStyle = fontSelect.value;
+
+    if(!validateForm()){
+        console.log(errors);
+        displayErrors();
+    }
+    else{
+        
+    }
+})
