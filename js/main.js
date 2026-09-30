@@ -87,6 +87,30 @@ function createStudentCard() {
     // Lägg till studentkortet i historiken
 
     // Spara och uppdatera historiken
+
+    const studentCard ={
+        fullname: fullnameInput.value,
+        email: emailInput.value,
+        phone: phoneInput.value,
+        font: fontSelect.value
+    };
+
+    history.unshift(studentCard);
+
+    let fullnamn = document.createTextNode(studentCard.fullname);
+    previewFullname.innerHTML = "";
+    previewFullname.style.fontFamily = studentCard.font;
+    previewFullname.appendChild(fullnamn);
+
+    let email = document.createTextNode(studentCard.email);
+    previewEmail.innerHTML = "";
+    previewEmail.style.fontFamily = `${studentCard.font}`;
+    previewEmail.appendChild(email);
+
+    let phone = document.createTextNode(studentCard.phone);
+    previewPhone.innerHTML = "";
+    previewPhone.style.fontFamily = studentCard.font;
+    previewPhone.appendChild(phone);
 }
 
 
@@ -155,7 +179,6 @@ function deleteHistory() {
 // - läs in och visa eventuell tidigare historik
 
 
-
 form.addEventListener("submit", function(event){
     event.preventDefault();
 
@@ -165,10 +188,9 @@ form.addEventListener("submit", function(event){
     const fontStyle = fontSelect.value;
 
     if(!validateForm()){
-        console.log(errors);
         displayErrors();
     }
     else{
-        
+        createStudentCard();
     }
 })
