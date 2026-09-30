@@ -119,6 +119,8 @@ function createStudentCard() {
  */
 function saveHistory() {
     // Spara history i localStorage
+    let studentCards = JSON.stringify(history);
+    localStorage.setItem("student", studentCards)
 }
 
 
@@ -129,6 +131,8 @@ function loadHistory() {
     // Hämta eventuell sparad historik
 
     // Uppdatera history
+    let studentCards = localStorage.getItem("student");
+    history = JSON.parse(studentCards);
 }
 
 
@@ -138,7 +142,30 @@ function loadHistory() {
 function renderHistory() {
     // Rensa tidigare visad historik
 
-    // Skriv ut innehållet i history till DOM
+    historySection.innerHTML = "";
+    // Skriv ut innehållet i history till DOM'
+    history.forEach(function (studentCard) {
+        const article = document.createElement("article");
+        const name = document.createElement("div");
+        const email = document.createElement("div");
+        const phone = document.createElement("div");
+        const font = document.createElement("div");
+
+        article.style.border = "rgb(210 210 210) solid 1px"
+        article.style.margin = "10px";
+        article.style.padding = "10px";
+
+        name.textContent = "Namn: " + studentCard.fullname;
+        email.textContent = "Email: " + studentCard.email;
+        phone.textContent = "Telefon: " + studentCard.phone;
+        font.textContent = "Font:" + studentCard.font;
+
+        article.appendChild(name);
+        article.appendChild(email);
+        article.appendChild(phone);
+        article.appendChild(font);
+        historySection.appendChild(article);
+    });
 }
 
 
@@ -149,6 +176,8 @@ function clearForm() {
     // Återställ formulär och studentkort
 
     // Rensa eventuella felmeddelanden
+
+
 }
 
 
@@ -178,7 +207,6 @@ function deleteHistory() {
 // När sidan laddas:
 // - läs in och visa eventuell tidigare historik
 
-
 form.addEventListener("submit", function(event){
     event.preventDefault();
 
@@ -192,5 +220,15 @@ form.addEventListener("submit", function(event){
     }
     else{
         createStudentCard();
+        saveHistory();
+        renderHistory();
     }
+})
+
+document.addEventListener("DOMContentLoaded", function(event){
+    event.preventDefault();
+    loadHistory();
+    renderHistory();
+
+    
 })
