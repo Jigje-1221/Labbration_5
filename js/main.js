@@ -60,11 +60,8 @@ function validateForm() {
  */
 function displayErrors() {
     // Rensa tidigare felmeddelanden
-
-    // Skriv ut aktuella felmeddelanden till DOM
-
     errorList.innerHTML = "";
-
+    // Skriv ut aktuella felmeddelanden till DOM
     for(let i = 0; i < errors.length; i++){
         let newErrorEl = document.createElement("li");
         let newErrorText = document.createTextNode(errors[i]);
@@ -80,14 +77,9 @@ function displayErrors() {
  * Skapar ett studentkort och visar det på sidan.
  */
 function createStudentCard() {
+    // Rensa felmeddelanden
+    displayErrors();
     // Hämta information från formuläret
-
-    // Uppdatera studentkortet
-
-    // Lägg till studentkortet i historiken
-
-    // Spara och uppdatera historiken
-
     const studentCard ={
         fullname: fullnameInput.value,
         email: emailInput.value,
@@ -95,22 +87,26 @@ function createStudentCard() {
         font: fontSelect.value
     };
 
-    history.unshift(studentCard);
+    // Uppdatera studentkortet
+    document.querySelector(".card").style.fontFamily = studentCard.font;
 
     let fullnamn = document.createTextNode(studentCard.fullname);
     previewFullname.innerHTML = "";
-    previewFullname.style.fontFamily = studentCard.font;
     previewFullname.appendChild(fullnamn);
 
     let email = document.createTextNode(studentCard.email);
     previewEmail.innerHTML = "";
-    previewEmail.style.fontFamily = `${studentCard.font}`;
     previewEmail.appendChild(email);
 
     let phone = document.createTextNode(studentCard.phone);
     previewPhone.innerHTML = "";
-    previewPhone.style.fontFamily = studentCard.font;
     previewPhone.appendChild(phone);
+    // Lägg till studentkortet i historiken
+    history.unshift(studentCard);
+
+    // Spara och uppdatera historiken
+    saveHistory();
+    renderHistory();
 }
 
 
@@ -132,7 +128,9 @@ function loadHistory() {
 
     // Uppdatera history
     let studentCards = localStorage.getItem("student");
-    history = JSON.parse(studentCards);
+    if(studentCards){
+        history = JSON.parse(studentCards);
+    }
 }
 
 
@@ -178,6 +176,13 @@ function clearForm() {
     // Rensa eventuella felmeddelanden
 
 
+    form.reset();
+    errors = [];
+    displayErrors();
+    previewFullname.innerHTML = "Namn";
+    previewEmail.innerHTML = "E-post";
+    previewPhone.innerHTML = "Telefon";
+    document.querySelector(".card").style.fontFamily = "Arial";
 }
 
 
@@ -188,6 +193,10 @@ function deleteHistory() {
     // Radera sparad historik
 
     // Uppdatera history och visningen på sidan
+
+    localStorage.removeItem("student");
+    history = [];
+    historySection.innerHTML = "";
 }
 
 
@@ -220,8 +229,6 @@ form.addEventListener("submit", function(event){
     }
     else{
         createStudentCard();
-        saveHistory();
-        renderHistory();
     }
 })
 
@@ -230,5 +237,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     loadHistory();
     renderHistory();
 
-    
+
+    clearButton.addEventListener("click", clearForm);
+    deleteHistoryButton.addEventListener("click", deleteHistory);
 })
